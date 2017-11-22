@@ -1,0 +1,11 @@
+﻿  test.cpp
+  xcurl.cpp
+xcurl.cpp(142): warning C4244: "=": Konvertierung von "double" in "unsigned int", möglicher Datenverlust
+xcurl.cpp(143): warning C4244: "=": Konvertierung von "double" in "unsigned int", möglicher Datenverlust
+xcurl.cpp(144): warning C4244: "=": Konvertierung von "double" in "unsigned int", möglicher Datenverlust
+xcurl.cpp(145): warning C4244: "=": Konvertierung von "double" in "unsigned int", möglicher Datenverlust
+xcurl.obj : error LNK2001: Nicht aufgelöstes externes Symbol "__imp_curl_easy_perform".
+xcurl.obj : error LNK2001: Nicht aufgelöstes externes Symbol "__imp_curl_easy_init".
+xcurl.obj : error LNK2001: Nicht aufgelöstes externes Symbol "__imp_curl_easy_cleanup".
+xcurl.obj : error LNK2001: Nicht aufgelöstes externes Symbol "__imp_curl_easy_setopt".
+C:\Users\wladi\Documents\Visual Studio 2017\Projects\xcurl\x64\Release\xcurl.exe : fatal error LNK1120: 4 nicht aufgelöste Externe
