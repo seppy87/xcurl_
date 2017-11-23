@@ -1,7 +1,7 @@
 #include"xcurl.hpp"
 
 using namespace xol;
-
+#ifdef _WIN32
 char *
 strcasestr(const char *s, const char *find)
 {
@@ -20,6 +20,7 @@ strcasestr(const char *s, const char *find)
 	}
 	return ((char *)s);
 }
+#endif
 
 size_t headerfunc(void* ptr, size_t size, size_t nmemb, void* userdata)
 {
@@ -35,6 +36,7 @@ curl::curl(std::string path)
 	memset(&dnld_params, 0, sizeof(dnld_params));
 	strncpy(dnld_params.dnld_url, me.url.c_str(), strlen((me.url.c_str())));
 	me.url = path;
+
 	me.handle = curl_easy_init();
 	curl_easy_setopt(me.handle, CURLOPT_URL, me.url.c_str());
 	curl_easy_setopt(me.handle, CURLOPT_HEADER, 1);
@@ -49,7 +51,7 @@ curl::curl(std::string path)
 	curl_easy_cleanup(me.handle);
 	me.parseHeader();
 	me.collectInfo();
-	
+
 
 }
 
@@ -91,7 +93,7 @@ int curl::get_oname_from_cd(char const*const cd, char *oname)
 	/* Example Content-Disposition: filename=name1367; charset=funny; option=strange */
 
 	/* If filename is present */
-	val = strcasestr(cd, key);
+	val = C_TEXT(strcasestr(cd, key));
 	if (!val) {
 		printf("No key-value for \"%s\" in \"%s\"", key, cdtag);
 		goto bail;

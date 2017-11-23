@@ -2,8 +2,17 @@
 #define _XCURL_HPP
 
 #define me (*this)
-
-#include"curl\curl\curl.h"
+#ifdef _WIN32
+    #include"curl\curl\curl.h"
+    #include<Windows.h>
+    #define strncasecmp(x,y,z) _strnicmp(x,y,z)
+#endif
+#ifdef __linux__
+    #include<curl/curl.h>
+    #include<math.h>
+    #define DWORD unsigned int
+    #define ERROR_SUCCESS 0
+#endif
 #include<string>
 #include<vector>
 #include<map>
@@ -12,21 +21,23 @@
 #include <sys/stat.h>
 #include <sys/types.h>
 #include <stdlib.h>
-#include<Windows.h>
+
+
 
 
 #include<iostream>
 
 
 
-#define strncasecmp(x,y,z) _strnicmp(x,y,z)
+
 #define STRCASESTR __strcasestr
 
-
+#define C_TEXT( text ) ((char*)std::string( text ).c_str())
 
 size_t headerfunc(void*,size_t,size_t,void*);
+#ifdef _WIN32
 char * strcasestr(const char *s, const char *find);
-
+#endif
 //typedef unsigned long uint64_t;
 typedef struct {
 	char        dnld_remote_fname[4096];
@@ -38,6 +49,16 @@ typedef struct {
 
 namespace xol
 {
+    typedef enum enum_protocol{
+        HTTP_S,
+        FTP_S,
+        SFTP,
+        SCP,
+        POP3,
+        IMAP,
+        RTMP
+    }c_protocol_t;
+
 	typedef struct filesize_struct{
 		unsigned int TB;
 		unsigned int GB;

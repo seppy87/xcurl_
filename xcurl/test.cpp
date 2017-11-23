@@ -1,5 +1,5 @@
 #include"xcurl.hpp"
-#include<Windows.h>
+
 
 /* For older cURL versions you will also need
 #include <curl/types.h>
@@ -29,7 +29,7 @@ void getfilename(char* str)
 
 int main(int argc, char** argv)
 {
-	getfilename("http://7-zip.org/a/7z1604-x64.exe");
+	getfilename(C_TEXT("http://7-zip.org/a/7z1604-x64.exe"));
 	xol::curl my("http://7-zip.org/");
 	system("pause");
 	return 0;
