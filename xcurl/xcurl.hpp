@@ -26,17 +26,31 @@
 #include <algorithm>
 #include <cctype>
 #include <locale>
+#include"external_functions.hpp"
+
 
 //Crypto++
-#include <cryptopp/osrng.h>  //needed for AutoSeededRandomPool
-#include <cryptopp/modes.h>
-#include <cryptopp/blowfish.h>
-#include <cryptopp/filters.h>
-
-
+#ifdef __linux__
+	#include <cryptopp/osrng.h>  //needed for AutoSeededRandomPool
+	#include <cryptopp/modes.h>
+	#include <cryptopp/blowfish.h>
+	#include <cryptopp/filters.h>
+#endif
+#ifdef _WIN32
+	#include"cryptopp\include\osrng.h"
+	#include"cryptopp\include\modes.h"
+	#include"cryptopp\include\blowfish.h"
+	#include"cryptopp\include\filters.h"
+#endif
 
 
 #include<iostream>
+
+#ifdef _WIN32
+//#pragma comment (lib,"cryptopp.lib")
+#pragma comment(lib, "cryptlib.lib")
+#pragma comment(lib, "curl\\libcurl.lib")
+#endif
 
 
 
@@ -63,19 +77,23 @@ typedef struct {
 	uint64_t    dnld_file_sz;
 } dnld_params_t;
 
-typedef struct {
-    std::string unix_permissions;
-
-}filelist;
 
 typedef struct{
     CURL *curl;
     FILE* fp;
     std::function<size_t(void*,size_t,size_t,void*)> fptr;
+	std::function<size_t(void*, size_t, size_t, void*)> internal_ptr;
     size_t transfered;
     size_t filesize;
 }c_ftp_info_t;
 
+typedef struct {
+	std::string date;
+	std::string time;
+	std::string type;
+	std::string UNIX_permission;
+	std::string name;
+}c_ftpdir_t;
 
 namespace xol
 {
@@ -116,23 +134,25 @@ namespace xol
 		std::string url;
 		std::string output;
 		std::vector<std::string> raw_header_data;
+		std::vector<std::string> raw_received_data;
 		std::map<std::string, std::string> mapped_header_data;
 		std::map<std::string, std::string> head_data;
 		bool ssl;
 		std::string cadir;;
 		filesize_data_t fs;
 		std::string ua;
-
+		c_ftpdir_t ftp_filelist;
 		//transfer functions
 		std::function<size_t(void*,size_t,size_t,void*)> transfer_function;
 
 		//private method
 		void cryptStr(std::string&);
 		std::string deCryptStr(std::string);
-		std::string getCPUID();
+		//std::string getCPUID();
 	protected:
 		size_t write(void*, size_t, size_t, void*);
 		size_t header(void*, size_t, size_t, void*);
+		size_t ftp_get_funcc(void*, size_t, size_t, void*);
 		void parseHeader();
 		void collectInfo();
 		int get_oname_from_cd(char const*const cd, char *oname);
